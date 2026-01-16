@@ -56,21 +56,11 @@ def scan_to_dict(scan: Scan, include_stats: bool = False) -> Dict[str, Any]:
     }
 
     if include_stats:
-        severity_counts = {
-            "critical": 0,
-            "high": 0,
-            "medium": 0,
-            "low": 0,
-        }
-        for finding in scan.findings:
-            sev = (finding.severity or "").lower()
-            if sev in severity_counts:
-                severity_counts[sev] += 1
-            else:
-                severity_counts["low"] += 1
-        data["severity_counts"] = severity_counts
+        counts = severity_counts(scan.findings)
+        data["severity_counts"] = counts
 
     return data
+
 
 
 def finding_to_dict(finding: Finding) -> Dict[str, Any]:
